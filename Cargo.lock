@@ -3,5 +3,12 @@
 version = 3
 
 [[package]]
-name = "wasm-hello"
+name = "demo-app"
+version = "0.1.0"
+dependencies = [
+ "wasmedge-anna",
+]
+
+[[package]]
+name = "wasmedge-anna"
 version = "0.1.0"
