@@ -1,5 +1,4 @@
 extern "C" {
-    fn __wasmedge_anna_add(a: i32, b: i32) -> i32;
     fn __wasmedge_anna_put(
         key_size: usize,
         key_ptr: *const u8,
@@ -12,10 +11,6 @@ extern "C" {
         val_buf_size: usize,
         val_buf_ptr: *mut u8,
     ) -> usize;
-}
-
-pub fn add(a: i32, b: i32) -> i32 {
-    unsafe { __wasmedge_anna_add(a, b) }
 }
 
 pub fn put(key: impl AsRef<str>, value: impl AsRef<[u8]>) -> bool {
@@ -47,9 +42,4 @@ pub fn get(key: impl AsRef<str>) -> Option<Vec<u8>> {
 
     val_buf.resize(val_size, Default::default());
     Some(val_buf)
-}
-
-#[no_mangle]
-fn add2(a: i32) -> i32 {
-    unsafe { __wasmedge_anna_add(a, 2) }
 }
