@@ -6,8 +6,12 @@ extern "C" {
         val_size: usize,
         val_ptr: *const u8,
     ) -> bool;
-    fn __wasmedge_anna_get_stage_1(key_size: usize, key_ptr: *const u8) -> usize;
-    fn __wasmedge_anna_get_stage_2(key_size: usize, key_ptr: *const u8, val_ptr: *mut u8) -> bool;
+    fn __wasmedge_anna_get(
+        key_size: usize,
+        key_ptr: *const u8,
+        val_buf_size: usize,
+        val_buf_ptr: *mut u8,
+    ) -> usize;
 }
 
 pub fn add(a: i32, b: i32) -> i32 {
@@ -22,17 +26,27 @@ pub fn put(key: impl AsRef<str>, value: impl AsRef<[u8]>) -> bool {
 
 pub fn get(key: impl AsRef<str>) -> Option<Vec<u8>> {
     let key = key.as_ref();
-    let val_size = unsafe { __wasmedge_anna_get_stage_1(key.len(), key.as_ptr()) };
-    if val_size == 0 {
-        return None;
+    let mut val_size;
+    let mut val_buf = Vec::new();
+
+    loop {
+        val_size = unsafe {
+            __wasmedge_anna_get(key.len(), key.as_ptr(), val_buf.len(), val_buf.as_mut_ptr())
+        };
+        if val_size == 0 {
+            return None;
+        }
+        if val_size > val_buf.len() {
+            // buffer is too small
+            val_buf.resize(val_size, Default::default());
+        } else {
+            break;
+        }
+        // loop in case the value is changed during this little period
     }
-    let mut val = vec![0; val_size];
-    let ok = unsafe { __wasmedge_anna_get_stage_2(key.len(), key.as_ptr(), val.as_mut_ptr()) };
-    if ok {
-        Some(val)
-    } else {
-        None
-    }
+
+    val_buf.resize(val_size, Default::default());
+    Some(val_buf)
 }
 
 #[no_mangle]
