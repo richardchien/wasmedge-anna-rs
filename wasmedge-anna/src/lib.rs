@@ -13,13 +13,13 @@ extern "C" {
     ) -> usize;
 }
 
-pub fn put(key: impl AsRef<str>, value: impl AsRef<[u8]>) -> bool {
+pub fn put(key: impl AsRef<[u8]>, value: impl AsRef<[u8]>) -> bool {
     let key = key.as_ref();
     let val = value.as_ref();
     unsafe { __wasmedge_anna_put(key.len(), key.as_ptr(), val.len(), val.as_ptr()) }
 }
 
-pub fn get(key: impl AsRef<str>) -> Option<Vec<u8>> {
+pub fn get(key: impl AsRef<[u8]>) -> Option<Vec<u8>> {
     let key = key.as_ref();
     let mut val_size;
     let mut val_buf = Vec::new();
