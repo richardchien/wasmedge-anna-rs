@@ -1,2 +1,2 @@
 [workspace]
-members = ["wasmedge-anna", "examples/hello"]
+members = ["wasmedge-anna", "examples/hello", "examples/js-demo"]
