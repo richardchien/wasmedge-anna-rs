@@ -31,10 +31,19 @@ fn main() {
 
 ```shell
 cargo build --target wasm32-wasi
-/path/to/wasmedge_anna /path/to/anna/conf/anna-local.yml target/wasm32-wasi/debug/app-name.wasm
+/path/to/wasmedge_anna /path/to/anna-config.yml target/wasm32-wasi/debug/app-name.wasm
 ```
 
 ## Examples
 
 - [hello](examples/hello)
 - [js-demo](examples/js-demo)
+
+Build and run examples with:
+
+```sh
+# in `wasmedge-anna-rs` directory
+cargo build --target wasm32-wasi
+/path/to/wasmedge_anna /path/to/anna-config.yml target/wasm32-wasi/debug/hello.wasm
+/path/to/wasmedge_anna /path/to/anna-config.yml target/wasm32-wasi/debug/js-demo.wasm examples/js-demo/demo.js
+```
